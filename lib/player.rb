@@ -3,28 +3,20 @@ class Player
 
   def initialize(window)
     @image = Gosu::Image.new(window, "media/Starfighter.bmp", false)
-    @x = @y = @vel_x = @vel_y = 0.0
-    @cooloff = @score = 0
+    @x = @y = @vel_x = 0.0
+    @move_wait = @cooloff = @score = 0
   end
 
   def warp(x, y)
     @x, @y = x, y
   end
   
-  def move_up
-    @vel_y = -2.9
-  end
-
-  def move_down
-    @vel_y = 2.9
-  end
-
   def move_left
-    @vel_x = -80
+    do_move(-80)
   end
 
   def move_right
-    @vel_x = 80
+    do_move(80)
   end
 
   def fire
@@ -34,14 +26,8 @@ class Player
 
   def move
     @x += @vel_x
-    @y += @vel_y
-
-    #todo consider if warping is desired
     @x %= 480
-    @y %= 480
-
     @cooloff = @cooloff - 1
-
     @vel_x = @vel_y = 0.0
   end
 
@@ -51,5 +37,13 @@ class Player
 
   def draw
     @image.draw(@x, @y, 1)
+  end
+
+  private:
+  def do_move(amount)
+    if @move_wait <= 0
+      @vel_x = amount
+      @move_wait = 10
+    end
   end
 end
