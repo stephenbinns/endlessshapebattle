@@ -42,6 +42,7 @@ class Enemy
     @y += @speed
     if (@y + @img.height) >= 480 + 80
       @active = false
+      @window.player.take_hit
     end
   end
 end
