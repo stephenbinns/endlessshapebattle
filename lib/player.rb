@@ -1,14 +1,22 @@
 class Player
-  attr_reader :x, :y, :image, :type, :score
+  attr_reader :x, :y, :image, :type, :score, :chain, :level, :lives
 
   def initialize(window)
     @image_c = Gosu::Image.new(window, "media/Circle.png", false)
     @image_s = Gosu::Image.new(window, "media/Square.png", false)
     @image_t = Gosu::Image.new(window, "media/Triangle.png", false)
+    
+    reset
+  end
+
+  def reset
     @image = @image_t
-    @type = 0
+    @type = Shapes::Circle
     @x = @y = @vel_x = 0.0
     @move_wait = @cooloff = @score = 0
+    @chain = 0
+    @level = 1
+    @lives = 3
   end
 
   def warp(x, y)
@@ -26,17 +34,31 @@ class Player
   def change_type(type)
     @type = type
     case type
-      when 0
+      when Shapes::Circle
         @image = @image_c
-      when 1
+      when Shapes::Square
         @image = @image_s
-      when 2
+      when Shapes::Triangle
         @image = @image_t
     end
   end
 
   def hit_shape
-    @score += 1
+    @chain += 1
+    @score += @chain
+    @level = (@score / 100) + 1
+  end
+ 
+  def hit_nothing
+    @chain = 0
+  end
+  
+  def take_hit
+    @lives = @lives - 1
+    if @lives == 0
+      # reset game
+      reset
+    end
   end
 
   def fire

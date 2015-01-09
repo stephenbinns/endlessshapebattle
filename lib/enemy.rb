@@ -17,7 +17,7 @@ class Enemy
     @color.red = rand(256 - 40) + 40
     @color.green = rand(256 - 40) + 40
     @color.blue = rand(256 - 40) + 40
-    @speed = 2.9
+    @speed = @window.player.level 
     @active = true
   end
  

@@ -5,11 +5,11 @@ class EnemyCache
     while @enemies.size < 30
       type = @enemies.size % 3
       case type
-        when 0
+        when Shapes::Circle
           @enemies << Enemy.new(window, "Circle", type)
-        when 1
+        when Shapes::Square
           @enemies << Enemy.new(window, "Square", type)
-        when 2
+        when Shapes::Triangle
           @enemies << Enemy.new(window, "Triangle", type)
       end
     end
@@ -25,9 +25,9 @@ class EnemyCache
   end
 
   def update
-    chance = rand(30)
+    chance = rand(150)
 
-    spawn if chance < 1
+    spawn if chance < @window.player.level
     @enemies.each { |b| b.update }
 
     @window.bullets.check_collisions @enemies.select { |e| e.active? }
