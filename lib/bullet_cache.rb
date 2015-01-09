@@ -7,16 +7,16 @@ class BulletCache
   end
 
   def fire(player)
-    if player.can_fire?
-      player.fire
-      bullet = @bullets.select { |b| b.active? == false }.first
-      bullet.fire(player) if bullet
-    end
+    return unless player.can_fire?
+
+    player.fire
+    bullet = @bullets.select { |b| b.active? == false }.first
+    bullet.fire(player) if bullet
   end
 
   def check_collisions(others)
     active = @bullets.select { |b| b.active? }
-    active.each { |b| b.collide(others) }
+    active.each { |b| b.collide(others.select { |o| o.type == b.type }) }
   end
 
   def draw

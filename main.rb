@@ -9,14 +9,16 @@ require_relative 'lib/enemy_cache'
 require_relative 'lib/star'
 
 class GameWindow < Gosu::Window
+  attr_reader :bullets, :player
+
   def initialize
     super(640, 480, false)
     self.caption = 'Hello World!'
-    @font = Gosu::Font.new self, Gosu::default_font_name, 40
+    @font = Gosu::Font.new self, Gosu::default_font_name, 20
     @player = Player.new(self)
-    @player.warp(320, 400)
+    @player.warp(80 * 3, 400)
     @stars = []
-    @bullet_cache = BulletCache.new(self)
+    @bullets = BulletCache.new(self)
     @enemy_cache = EnemyCache.new(self)
  
     while @stars.size < 30
@@ -25,7 +27,7 @@ class GameWindow < Gosu::Window
 
     @bloom = Ashton::Shader.new fragment: :bloom
     @bloom.glare_size = 0.0085
-    @bloom.power = 0.3 
+    @bloom.power = 0.2 
   end
 
   def button_down(id)
@@ -35,12 +37,6 @@ class GameWindow < Gosu::Window
   end
 
   def update
-    if button_down? Gosu::KbUp or button_down? Gosu::GpUp then
-      @player.move_up
-    end
-    if button_down? Gosu::KbDown or button_down? Gosu::GpDown then
-      @player.move_down
-    end
     if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
       @player.move_left
     end
@@ -48,23 +44,31 @@ class GameWindow < Gosu::Window
       @player.move_right
     end
     if button_down? Gosu::KbZ or button_down? Gosu::GpButton1 then
-      @bullet_cache.fire @player
+      @player.change_type 0
+      @bullets.fire @player
     end
+    if button_down? Gosu::KbX or button_down? Gosu::GpButton2 then
+      @player.change_type 1
+      @bullets.fire @player
+    end
+    if button_down? Gosu::KbC or button_down? Gosu::GpButton3 then
+      @player.change_type 2
+      @bullets.fire @player
+    end   
 
     @player.move
-    @bullet_cache.update
-    @enemy_cache.update @bullet_cache
-    #@stars.each { |star| star.update }
+    @bullets.update
+    @enemy_cache.update
   end
 
   def draw
     post_process(@bloom) do
-      @bullet_cache.draw
+      @bullets.draw
       @enemy_cache.draw
-      #@stars.each { |star| star.draw }
+      @player.draw
     end
-    
-    @player.draw
+
+    @font.draw("Score: #{@player.score}", 480, 10, ZOrder::UI, 1.0, 1.0, 0xffffffff)
   end
 end
 

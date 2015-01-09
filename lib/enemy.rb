@@ -1,21 +1,22 @@
 class Enemy
-  attr_reader :x, :y 
+  attr_reader :x, :y, :type 
 
-  def initialize(window, image)
-    @img =  Gosu::Image.new(window, "media/#{image}.png", false)
+  def initialize(window, image, type)
+    @window = window
+    @img = Gosu::Image.new(window, "media/#{image}.png", false)
     @color = Gosu::Color.new(0xff000000)
-    @color.red = rand(256 - 40) + 40
-    @color.green = rand(256 - 40) + 40
-    @color.blue = rand(256 - 40) + 40
-
     @x = @y = 0
     @speed = 0.0
     @active = false
+    @type = type
   end
 
   def spawn
     @x = rand(6) * 80
-    @y = 0
+    @y = -90
+    @color.red = rand(256 - 40) + 40
+    @color.green = rand(256 - 40) + 40
+    @color.blue = rand(256 - 40) + 40
     @speed = 2.9
     @active = true
   end
@@ -26,6 +27,7 @@ class Enemy
  
   def collided(other)
     @active = false
+    @window.player.hit_shape
   end
 
   def draw  
@@ -38,7 +40,7 @@ class Enemy
     return unless @active
 
     @y += @speed
-    if (@y + @img.height) >= 480
+    if (@y + @img.height) >= 480 + 80
       @active = false
     end
   end

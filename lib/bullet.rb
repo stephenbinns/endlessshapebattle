@@ -1,5 +1,5 @@
 class Bullet
-  attr_reader :x, :y 
+  attr_reader :x, :y, :type 
 
   def initialize(window)
     @img =  Gosu::Image.new(window, "media/Star.png", false)
@@ -14,15 +14,16 @@ class Bullet
   end
 
   def fire(player)
-    @x = player.x + (player.image.width / 2) 
+    @x = player.x + (player.image.width / 2) - (@img.width / 2) 
     @y = player.y
-    @speed = -2.9
+    @speed = -6
     @active = true
+    @type = player.type
   end
 
   def collide(others)
     others.each do |o|
-      if Gosu::distance(@x, @y, o.x, o.y) < 10
+      if Gosu::distance(@x, @y, o.x, o.y) <= 40
         o.collided(self)
         collided
       end
@@ -32,7 +33,7 @@ class Bullet
   def collided
     @active = false
   end
- 
+
   def active?
     @active
   end 
