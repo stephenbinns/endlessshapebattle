@@ -16,18 +16,20 @@ class GameWindow < Gosu::Window
     self.caption = 'Endless Shape Battle - 0.1'
     @font = Gosu::Font.new self, Gosu::default_font_name, 20
     @player = Player.new(self)
-    @player.warp(80 * 3, 400)
+    @player.warp(80 * 3 + 3, 400)
     @stars = []
     @bullets = BulletCache.new(self)
     @enemy_cache = EnemyCache.new(self)
- 
+    @grid = Gosu::Image.new(self, "media/Grid.png", true)
+    @color = Gosu::Color.new(0xff000000)
+
     while @stars.size < 30
       @stars << Star.new(self)
     end
 
     @bloom = Ashton::Shader.new fragment: :bloom
-    @bloom.glare_size = 0.0085
-    @bloom.power = 0.3 
+    @bloom.glare_size = 0.005
+    @bloom.power = 0.25 
   end
 
   def button_down(id)
@@ -59,6 +61,22 @@ class GameWindow < Gosu::Window
     @player.move
     @bullets.update
     @enemy_cache.update
+
+    @color.red = pulse(@color.red)
+    @color.green = pulse(@color.green)
+    @color.blue = pulse(@color.blue)
+  end
+ 
+  def pulse(value)
+    if @increment
+       val = [125, value+1].min
+       @increment = val != 125
+    else
+       val = [20, value-1].max
+       @increment = val == 20
+    end
+
+    val
   end
 
   def draw
@@ -66,6 +84,16 @@ class GameWindow < Gosu::Window
       @bullets.draw
       @enemy_cache.draw
       @player.draw
+      timex = 0
+      timey = 0
+      6.times do
+         6.times do
+           @grid.draw(timex, timey, ZOrder::Background, 1,1, @color, :add)
+           timey += 80
+         end
+         timey = 0
+         timex += 80
+      end
     end
 
     @font.draw("Score: #{@player.score}", 480, 40, ZOrder::UI, 1.0, 1.0, 0xffffffff)
