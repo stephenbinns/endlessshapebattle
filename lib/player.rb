@@ -6,13 +6,13 @@ class Player
     @image_s = Gosu::Image.new(window, "media/Square.png", false)
     @image_t = Gosu::Image.new(window, "media/Triangle.png", false)
     
-    @x = @y = @vel_x = 0.0
     reset
   end
 
   def reset
     @image = @image_t
     @type = Shapes::Circle
+    @x = @y = @vel_x = 0.0
     @move_wait = @cooloff = @score = 0
     @chain = 0
     @level = 1

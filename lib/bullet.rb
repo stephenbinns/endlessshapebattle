@@ -24,7 +24,7 @@ class Bullet
 
   def collide(others)
     others.each do |o|
-      if Gosu::distance(@x, @y, o.x, o.y) <= 40
+      if Gosu::distance(@x, @y, o.x + 40, o.y + 40) <= 40
         o.collided(self)
         collided
       end

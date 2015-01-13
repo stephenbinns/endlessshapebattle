@@ -39,6 +39,7 @@ class GameWindow < Gosu::Window
   end
 
   def update
+    $gosu_blocks.clear if defined? $gosu_blocks # workaround for Gosu 0.7.45 bug.
     if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
       @player.move_left
     end

@@ -31,35 +31,37 @@ class Enemy
   def collided(other)
     @active = false
     @window.player.hit_shape
-
-    # todo display for x frames
-    @last_update_at ||= Gosu::milliseconds
-    delta = [Gosu::milliseconds - @last_update_at, 100].min * 0.001 # Limit delta to 100ms (10fps), in case of freezing.
-    @last_update_at = Gosu::milliseconds
-
-    @mouse_emitter = Ashton::ParticleEmitter.new 0, 0, 3,
+    @death_frames = 200
+    @particles = Ashton::ParticleEmitter.new 0, 0, 3,
                                                  scale: 4,
                                                  speed: 20..50,
-                                                 max_particles: 5000,
+                                                 max_particles: 1000,
                                                  offset: 0..5,
-                                                 interval: 0.0010,
-                                                 color: Gosu::Color.rgba(0, 255, 255, 100),
-                                                 fade: 25,
-                                                 gravity: 60 # pixels/s*s
-
-    @mouse_emitter.x, @mouse_emitter.y = x, y
-    @mouse_emitter.update delta
-
+                                                 interval: 0.0090,
+                                                 color: @color,
+                                                 fade: 100,
+                                                 gravity: 30 # pixels/s*s
+    @particles.x, @particles.y = x + 40, y + 40
   end
 
   def draw  
-    @mouse_emitter.draw if @mouse_emitter
+    @particles.draw if @particles
     return unless @active
 
     @img.draw(@x, @y, ZOrder::Stars,1,1, @color, :add)
   end
 
   def update
+    if (@death_frames && @death_frames > 0)
+      @last_update_at ||= Gosu::milliseconds
+      delta = [Gosu::milliseconds - @last_update_at, 100].min * 0.001 # Limit delta to 100ms (10fps), in case of freezing.
+      @last_update_at = Gosu::milliseconds
+      @particles.update delta
+      @death_frames = @death_frames - 1
+    else
+      @particles = nil
+    end
+
     return unless @active
 
     @y += @speed
