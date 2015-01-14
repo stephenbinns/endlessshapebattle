@@ -1,8 +1,8 @@
 class BulletCache
-  def initialize(window)
+  def initialize(window, player)
     @bullets = []
     while @bullets.size < 30
-      @bullets.push(Bullet.new(window))
+      @bullets.push(Bullet.new(window, player))
     end
   end
 

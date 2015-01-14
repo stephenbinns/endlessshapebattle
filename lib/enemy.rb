@@ -4,8 +4,9 @@ require 'gosu'
 class Enemy
   attr_reader :x, :y, :type 
 
-  def initialize(window, image, type)
+  def initialize(window, image, type, player)
     @window = window
+    @player = player
     @img = Gosu::Image.new(window, "media/#{image}.png", false)
     @color = Gosu::Color.new(0xff000000)
     @x = @y = 0
@@ -20,7 +21,7 @@ class Enemy
     @color.red = rand(256 - 40) + 40
     @color.green = rand(256 - 40) + 40
     @color.blue = rand(256 - 40) + 40
-    @speed = @window.player.level + rand(2) 
+    @speed = @player.level + rand(2) 
     @active = true
   end
  
@@ -30,7 +31,7 @@ class Enemy
  
   def collided(other)
     @active = false
-    @window.player.hit_shape
+    @player.hit_shape
     @death_frames = 100
     @particles = Ashton::ParticleEmitter.new 0, 0, 3,
                                                  scale: 4,
@@ -67,7 +68,7 @@ class Enemy
     @y += @speed
     if (@y + @img.height) >= 480 + 80
       @active = false
-      @window.player.take_hit
+      @player.take_hit
     end
   end
 end

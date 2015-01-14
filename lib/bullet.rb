@@ -1,8 +1,9 @@
 class Bullet
   attr_reader :x, :y, :type 
 
-  def initialize(window)
+  def initialize(window, player)
     @window = window
+    @player = player
     @img =  Gosu::Image.new(window, "media/Star.png", false)
     @color = Gosu::Color.new(0xff000000)
     @color.red = 254
@@ -52,7 +53,7 @@ class Bullet
     if (@y + @img.height) <= 0
       @speed = 0.0
       @active = false
-      @window.player.hit_nothing
+      @player.hit_nothing
     end
   end
 end

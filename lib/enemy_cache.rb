@@ -1,17 +1,19 @@
 class EnemyCache
-  def initialize(window)
+  def initialize(window, player, bullets)
     @window = window
+    @player = player
+    @bullets = bullets
     @cooloff = 0
     @enemies = []
     while @enemies.size < 30
       type = @enemies.size % 3
       case type
         when Shapes::Circle
-          @enemies << Enemy.new(window, "Circle", type)
+          @enemies << Enemy.new(window, "Circle", type, player)
         when Shapes::Square
-          @enemies << Enemy.new(window, "Square", type)
+          @enemies << Enemy.new(window, "Square", type, player)
         when Shapes::Triangle
-          @enemies << Enemy.new(window, "Triangle", type)
+          @enemies << Enemy.new(window, "Triangle", type, player)
       end
     end
   end
@@ -29,10 +31,10 @@ class EnemyCache
     @cooloff -= 1
     if @cooloff <= 0
       spawn
-      @cooloff = 150 - (@window.player.level * rand(30)) 
+      @cooloff = 150 - (@player.level * rand(30)) 
     end
     @enemies.each { |b| b.update }
 
-    @window.bullets.check_collisions @enemies.select { |e| e.active? }
+    @bullets.check_collisions @enemies.select { |e| e.active? }
   end
 end
