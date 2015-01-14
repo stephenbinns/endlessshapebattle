@@ -7,7 +7,7 @@ class MainMenu
     @wallpaper = Gosu::Image.new(window, "media/fullscreen.png", false)
     @menu = []
     @menu << MenuItem.new("Start", @font, 1, lambda { start_game }, true) 
-    @menu << MenuItem.new("Scores", @font, 2, lambda { start_game }, false) 
+    @menu << MenuItem.new("Scores", @font, 2, lambda { high_scores }, false) 
     @menu << MenuItem.new("Exit", @font, 3, lambda { window.close }, false) 
     @cooloff = 0
   end
@@ -17,6 +17,10 @@ class MainMenu
     @menu.each { |m| m.draw } 
   end
 
+  def high_scores
+    @window.change_state HighScores.new @window, 0
+  end
+  
   def start_game
     @window.change_state GameEngine.new @window
   end

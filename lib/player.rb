@@ -2,6 +2,7 @@ class Player
   attr_reader :x, :y, :image, :type, :score, :chain, :level, :lives
 
   def initialize(window)
+    @window = window
     @image_c = Gosu::Image.new(window, "media/Circle.png", false)
     @image_s = Gosu::Image.new(window, "media/Square.png", false)
     @image_t = Gosu::Image.new(window, "media/Triangle.png", false)
@@ -58,8 +59,8 @@ class Player
   def take_hit
     @lives -= 1
     if @lives == 0
-      # reset game
-      reset
+      
+      @window.change_state HighScores.new @window, @score
     end
   end
 

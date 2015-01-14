@@ -2,6 +2,7 @@ require 'gosu'
 require 'ashton'
 
 require_relative 'menu'
+require_relative 'scores'
 require_relative 'game'
 require_relative 'lib/player'
 require_relative 'lib/bullet'
