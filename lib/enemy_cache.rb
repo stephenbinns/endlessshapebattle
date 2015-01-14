@@ -26,7 +26,7 @@ class EnemyCache
   end
 
   def update
-    @cooloff = @cooloff - 1
+    @cooloff -= 1
     if @cooloff <= 0
       spawn
       @cooloff = 150 - (@window.player.level * rand(30)) 

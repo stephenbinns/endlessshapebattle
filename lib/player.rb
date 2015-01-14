@@ -12,11 +12,12 @@ class Player
   def reset
     @image = @image_t
     @type = Shapes::Circle
-    @x = @y = @vel_x = 0.0
+    @vel_x = 0.0
     @move_wait = @cooloff = @score = 0
     @chain = 0
     @level = 1
     @lives = 3
+    @x, @y = (80 * 3 + 3), 400
   end
 
   def warp(x, y)
@@ -55,7 +56,7 @@ class Player
   end
   
   def take_hit
-    @lives = @lives - 1
+    @lives -= 1
     if @lives == 0
       # reset game
       reset
@@ -70,8 +71,8 @@ class Player
   def move
     @x += @vel_x
     @x %= 480
-    @cooloff = @cooloff - 1
-    @move_wait = @move_wait - 1
+    @cooloff -= 1
+    @move_wait -= 1
     @vel_x = @vel_y = 0.0
   end
 

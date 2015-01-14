@@ -21,6 +21,7 @@ class GameWindow < Gosu::Window
     @bullets = BulletCache.new(self)
     @enemy_cache = EnemyCache.new(self)
     @grid = Gosu::Image.new(self, "media/Grid.png", true)
+    @wallpaper = Gosu::Image.new(self, "media/wallpaper.png", false)
     @color = Gosu::Color.new(0xff000000)
 
     while @stars.size < 30
@@ -97,13 +98,14 @@ class GameWindow < Gosu::Window
       end
     end
 
-    @font.draw("Score: #{@player.score}", 480, 40, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw("Chain: #{@player.chain}", 480, 60, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw("Level: #{@player.level}", 480, 80, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw("Lives: #{@player.lives}", 480, 100, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw("Z: () ", 480, 140, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw("X: []", 480, 160, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw("C: /\\", 480, 180, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+    @wallpaper.draw(480,0, ZOrder::UI)
+    @font.draw("Score: #{@player.score}", 500, 40, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+    @font.draw("Chain: #{@player.chain}", 500, 60, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+    @font.draw("Level: #{@player.level}", 500, 80, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+    @font.draw("Lives: #{@player.lives}", 500, 100, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+    @font.draw("Z: () ", 500, 140, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+    @font.draw("X: []", 500, 160, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+    @font.draw("C: /\\", 500, 180, ZOrder::UI, 1.0, 1.0, 0xffffffff)
   end
 end
 

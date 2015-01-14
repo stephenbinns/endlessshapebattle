@@ -20,7 +20,7 @@ class Enemy
     @color.red = rand(256 - 40) + 40
     @color.green = rand(256 - 40) + 40
     @color.blue = rand(256 - 40) + 40
-    @speed = @window.player.level + rand(1) 
+    @speed = @window.player.level + rand(2) 
     @active = true
   end
  
@@ -31,16 +31,16 @@ class Enemy
   def collided(other)
     @active = false
     @window.player.hit_shape
-    @death_frames = 200
+    @death_frames = 100
     @particles = Ashton::ParticleEmitter.new 0, 0, 3,
                                                  scale: 4,
                                                  speed: 20..50,
-                                                 max_particles: 1000,
-                                                 offset: 0..5,
+                                                 max_particles: 300,
+                                                 offset: 0..20,
                                                  interval: 0.0090,
                                                  color: @color,
-                                                 fade: 100,
-                                                 gravity: 30 # pixels/s*s
+                                                 fade: 20..90,
+                                                 time_to_live: 0..10
     @particles.x, @particles.y = x + 40, y + 40
   end
 
@@ -57,7 +57,7 @@ class Enemy
       delta = [Gosu::milliseconds - @last_update_at, 100].min * 0.001 # Limit delta to 100ms (10fps), in case of freezing.
       @last_update_at = Gosu::milliseconds
       @particles.update delta
-      @death_frames = @death_frames - 1
+      @death_frames -= 1
     else
       @particles = nil
     end
