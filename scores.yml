@@ -1,0 +1,21 @@
+---
+- !ruby/object:ScoreItem
+  value: 3
+- !ruby/object:ScoreItem
+  value: 0
+- !ruby/object:ScoreItem
+  value: 4
+- !ruby/object:ScoreItem
+  value: 10
+- !ruby/object:ScoreItem
+  value: 3
+- !ruby/object:ScoreItem
+  value: 7
+- !ruby/object:ScoreItem
+  value: 2
+- !ruby/object:ScoreItem
+  value: 5
+- !ruby/object:ScoreItem
+  value: 1
+- !ruby/object:ScoreItem
+  value: 6

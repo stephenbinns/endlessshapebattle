@@ -31,6 +31,7 @@ class Enemy
  
   def collided(other)
     @active = false
+    @speed = 0
     @player.hit_shape
     @death_frames = 100
     @particles = Ashton::ParticleEmitter.new 0, 0, 3,
