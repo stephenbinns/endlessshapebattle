@@ -32,6 +32,7 @@ class HighScores
 
   def draw
     @wallpaper.draw 0,0,0
+    @font.draw("High scores", 260, 30, ZOrder::UI, 1.0, 1.0, 0xffffffff)
     index = 0
     top_scores.each do |m| 
        index += 1

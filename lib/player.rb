@@ -53,7 +53,7 @@ class Player
   end
  
   def hit_nothing
-    @chain = 0
+    @chain = [@chain-1, 0].max
   end
   
   def take_hit

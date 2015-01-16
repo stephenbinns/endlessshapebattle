@@ -7,13 +7,14 @@ class GameEngine
     @player = Player.new(window)
     @player.warp(80 * 3 + 3, 400)
     @bullets = BulletCache.new(window, player)
-    @enemy_cache = EnemyCache.new(window, player, @bullets)
+    @enemy_cache = EnemyCache.new(window, player, @bullets, self)
     @grid = Gosu::Image.new(window, "media/Grid.png", true)
     @wallpaper = Gosu::Image.new(window, "media/wallpaper.png", false)
     @color = Gosu::Color.new(0xff000000)
     @bloom = Ashton::Shader.new fragment: :bloom
     @bloom.glare_size = 0.005
     @bloom.power = 0.25 
+    @waves = []
   end
 
   def button_down(id)
@@ -54,6 +55,9 @@ class GameEngine
     @color.red = pulse(@color.red)
     @color.green = pulse(@color.green)
     @color.blue = pulse(@color.blue)
+
+    @waves.delete_if {|w| w.dead? }
+    @waves.each {|w| w.update }
   end
  
   def pulse(value)
@@ -68,8 +72,14 @@ class GameEngine
     val
   end
 
+  def make_waves(wave)
+    @waves << wave
+  end
+
   def draw
-    @window.post_process(@bloom) do
+    shaders = @waves.map {|w| w.shader }
+    shaders << @bloom
+    @window.post_process(*shaders) do
       @bullets.draw
       @enemy_cache.draw
       @player.draw
@@ -93,6 +103,8 @@ class GameEngine
     @font.draw("Z: () ", 500, 140, ZOrder::UI, 1.0, 1.0, 0xffffffff)
     @font.draw("X: []", 500, 160, ZOrder::UI, 1.0, 1.0, 0xffffffff)
     @font.draw("C: /\\", 500, 180, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+
+    @font.draw "FPS: #{Gosu::fps} Waves: #{@waves.size}", 0, 0, 0
   end
 end
 

@@ -1,12 +1,10 @@
-require 'ashton'
-require 'gosu'
-
 class Enemy
   attr_reader :x, :y, :type 
 
-  def initialize(window, image, type, player)
+  def initialize(window, image, type, player, game)
     @window = window
     @player = player
+    @game = game
     @img = Gosu::Image.new(window, "media/#{image}.png", false)
     @color = Gosu::Color.new(0xff000000)
     @x = @y = 0
@@ -21,7 +19,7 @@ class Enemy
     @color.red = rand(256 - 40) + 40
     @color.green = rand(256 - 40) + 40
     @color.blue = rand(256 - 40) + 40
-    @speed = @player.level + rand(2) 
+    @speed = [@player.level + rand(2), 10].min
     @active = true
   end
  
@@ -33,37 +31,16 @@ class Enemy
     @active = false
     @speed = 0
     @player.hit_shape
-    @death_frames = 100
-    @particles = Ashton::ParticleEmitter.new 0, 0, 3,
-                                                 scale: 4,
-                                                 speed: 20..50,
-                                                 max_particles: 300,
-                                                 offset: 0..20,
-                                                 interval: 0.0090,
-                                                 color: @color,
-                                                 fade: 20..90,
-                                                 time_to_live: 0..10
-    @particles.x, @particles.y = x + 40, y + 40
+    @game.make_waves Shockwave.new(@x, @y)
   end
 
   def draw  
-    @particles.draw if @particles
     return unless @active
 
     @img.draw(@x, @y, ZOrder::Stars,1,1, @color, :add)
   end
 
   def update
-    if (@death_frames && @death_frames > 0)
-      @last_update_at ||= Gosu::milliseconds
-      delta = [Gosu::milliseconds - @last_update_at, 100].min * 0.001 # Limit delta to 100ms (10fps), in case of freezing.
-      @last_update_at = Gosu::milliseconds
-      @particles.update delta
-      @death_frames -= 1
-    else
-      @particles = nil
-    end
-
     return unless @active
 
     @y += @speed

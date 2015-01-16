@@ -7,6 +7,7 @@ require_relative 'game'
 require_relative 'lib/player'
 require_relative 'lib/bullet'
 require_relative 'lib/bullet_cache'
+require_relative 'lib/shockwave'
 require_relative 'lib/enemy'
 require_relative 'lib/enemy_cache'
 
