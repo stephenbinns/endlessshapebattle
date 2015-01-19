@@ -15,6 +15,7 @@ class GameEngine
     @bloom.glare_size = 0.005
     @bloom.power = 0.25 
     @waves = []
+    @combos = []
 
     @circ = Gosu::Image.new(window, "media/CircleSmall.png", true)
     @squr = Gosu::Image.new(window, "media/SquareSmall.png", true)
@@ -64,8 +65,15 @@ class GameEngine
 
     @waves.delete_if {|w| w.dead? }
     @waves.each {|w| w.update }
+
+    @combos.delete_if {|w| w.dead? }
+    @combos.each {|w| w.update }
   end
- 
+
+  def combo(combo)
+    @combos << combo
+  end
+
   def pulse(value)
     if @increment != nil && @increment
        val = [125, value+1].min
@@ -89,6 +97,7 @@ class GameEngine
       @bullets.draw
       @enemy_cache.draw
       @player.draw
+      @combos.each {|c| c.draw(@font)}
       timex = 0
       timey = 0
       6.times do

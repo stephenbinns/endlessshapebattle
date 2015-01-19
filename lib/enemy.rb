@@ -19,7 +19,7 @@ class Enemy
     @color.red = rand(256 - 40) + 40
     @color.green = rand(256 - 40) + 40
     @color.blue = rand(256 - 40) + 40
-    @speed = [@player.level + rand(2), 6].min
+    @speed = [@player.level + rand(2), 5].min
     @active = true
   end
  
@@ -32,6 +32,7 @@ class Enemy
     @speed = 0
     @player.hit_shape
     @game.make_waves Shockwave.new(@x, @y)
+    @game.combo Combo.new(@x, @y, @player.level)
   end
 
   def draw  
