@@ -4,6 +4,7 @@ class GameEngine
   def initialize(window)
     @window = window
     @font = Gosu::Font.new window, "media/digiffiti.ttf", 32
+    @font_large = Gosu::Font.new window, "media/digiffiti.ttf", 48
     @player = Player.new(window, self)
     @player.warp(80 * 3 + 3, 400)
     @bullets = BulletCache.new(window, player)
@@ -97,7 +98,7 @@ class GameEngine
       @bullets.draw
       @enemy_cache.draw
       @player.draw
-      @combos.each {|c| c.draw(@font)}
+      @combos.each {|c| c.draw(@font_large) }
       timex = 0
       timey = 0
       6.times do
@@ -125,7 +126,8 @@ class GameEngine
     @tria.draw(540, 190, ZOrder::UI, 1.0, 1.0)
 
     bomb_string = "*"*@player.bombs
-    @font.draw("Bombs: #{bomb_string}", 500, 220, ZOrder::UI)
+    @font.draw("Bombs:", 500, 220, ZOrder::UI)
+    @font.draw("#{bomb_string}", 500, 240, ZOrder::UI)
 
     @font.draw "FPS: #{Gosu::fps} Waves: #{@waves.size}", 0, 0, 0
   end

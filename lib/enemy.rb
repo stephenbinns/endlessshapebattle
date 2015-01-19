@@ -31,8 +31,10 @@ class Enemy
     @active = false
     @speed = 0
     @player.hit_shape
-    @game.make_waves Shockwave.new(@x, @y)
-    @game.combo Combo.new(@x, @y, @player.level)
+    origin_x = @x
+    origin_y = @y
+    @game.make_waves Shockwave.new(origin_x, origin_y)
+    @game.combo Combo.new(origin_x, origin_y, @player.chain)
   end
 
   def draw  
