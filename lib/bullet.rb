@@ -4,7 +4,11 @@ class Bullet
   def initialize(window, player)
     @window = window
     @player = player
-    @img =  Gosu::Image.new(window, "media/Star.png", false)
+
+    @circ = Gosu::Image.new(window, "media/CircleSmall.png", true)
+    @squr = Gosu::Image.new(window, "media/SquareSmall.png", true)
+    @tria = Gosu::Image.new(window, "media/TriangleSmall.png", true)
+
     @color = Gosu::Color.new(0xff000000)
     @color.red = 254
     @color.green = 254
@@ -16,17 +20,26 @@ class Bullet
   end
 
   def fire(player)
-    @x = player.x + (player.image.width / 2) - (@img.width / 2) 
+     @type = player.type
+    case @type
+      when Shapes::Circle
+        @img = @circ
+      when Shapes::Square
+        @img = @squr
+      when Shapes::Triangle
+        @img = @tria
+    end
+
+    @x = player.x + (player.image.width / 2) - (@img.width) 
     @y = player.y
     @speed = -6
     @active = true
-    @type = player.type
   end
 
   def collide(others)
     others.each do |o|
       if Gosu::distance(@x, @y, o.x + 40, o.y + 40) <= 40
-        o.collided(self)
+        o.collided
         collided
       end
     end
@@ -43,7 +56,7 @@ class Bullet
   def draw  
     return unless @active
 
-    @img.draw(@x, @y, ZOrder::Stars,1,1, @color, :add)
+    @img.draw(@x, @y, ZOrder::Stars,2,2, @color, :add)
   end
 
   def update

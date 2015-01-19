@@ -1,8 +1,9 @@
 class Player
-  attr_reader :x, :y, :image, :type, :score, :chain, :level, :lives
+  attr_reader :x, :y, :image, :type, :score, :chain, :level, :lives, :bombs
 
-  def initialize(window)
+  def initialize(window, game)
     @window = window
+    @game = game
     @image_c = Gosu::Image.new(window, "media/Circle.png", false)
     @image_s = Gosu::Image.new(window, "media/Square.png", false)
     @image_t = Gosu::Image.new(window, "media/Triangle.png", false)
@@ -14,7 +15,8 @@ class Player
     @image = @image_t
     @type = Shapes::Circle
     @vel_x = 0.0
-    @move_wait = @cooloff = @score = 0
+    @bombs = 0
+    @move_wait = @cooloff = @bomb_cooloff = @score = 0
     @chain = 0
     @level = 1
     @lives = 3
@@ -49,6 +51,7 @@ class Player
     @chain += 1
     @score += @chain
     @level = (@score / 100) + 1
+    @bombs += 1 if @score > 100 * [@level - 1, 1].max # todo fix this so it works!!
     @cooloff = 0
   end
  
@@ -59,7 +62,6 @@ class Player
   def take_hit
     @lives -= 1
     if @lives == 0
-      
       @window.change_state HighScores.new @window, @score
     end
   end
@@ -69,11 +71,20 @@ class Player
      # todo play sound
   end
 
+  def bomb
+    return if @bombs < 1 || @bomb_cooloff > 0
+
+    @bombs -= 1
+    @bomb_cooloff = 10
+    @game.enemy_cache.bomb
+  end
+
   def move
     @x += @vel_x
     @x %= 480
     @cooloff -= 1
     @move_wait -= 1
+    @bomb_cooloff -= 1
     @vel_x = @vel_y = 0.0
   end
 

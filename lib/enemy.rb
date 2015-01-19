@@ -19,7 +19,7 @@ class Enemy
     @color.red = rand(256 - 40) + 40
     @color.green = rand(256 - 40) + 40
     @color.blue = rand(256 - 40) + 40
-    @speed = [@player.level + rand(2), 10].min
+    @speed = [@player.level + rand(2), 6].min
     @active = true
   end
  
@@ -27,7 +27,7 @@ class Enemy
     @active
   end
  
-  def collided(other)
+  def collided
     @active = false
     @speed = 0
     @player.hit_shape

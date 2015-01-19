@@ -1,10 +1,10 @@
 class GameEngine
-  attr_reader :bullets, :player
+  attr_reader :bullets, :player, :enemy_cache
 
   def initialize(window)
     @window = window
     @font = Gosu::Font.new window, "media/digiffiti.ttf", 32
-    @player = Player.new(window)
+    @player = Player.new(window, self)
     @player.warp(80 * 3 + 3, 400)
     @bullets = BulletCache.new(window, player)
     @enemy_cache = EnemyCache.new(window, player, @bullets, self)
@@ -16,9 +16,9 @@ class GameEngine
     @bloom.power = 0.25 
     @waves = []
 
-    @circ = Gosu::Image.new(window, "media/Circle.png", true)
-    @squr = Gosu::Image.new(window, "media/Square.png", true)
-    @tria = Gosu::Image.new(window, "media/Triangle.png", true)
+    @circ = Gosu::Image.new(window, "media/CircleSmall.png", true)
+    @squr = Gosu::Image.new(window, "media/SquareSmall.png", true)
+    @tria = Gosu::Image.new(window, "media/TriangleSmall.png", true)
   end
 
   def button_down(id)
@@ -50,6 +50,9 @@ class GameEngine
       @player.change_type Shapes::Triangle
       @bullets.fire @player
     end   
+    if button_down? Gosu::KbSpace or button_down? Gosu::GpButton4 then
+      @player.bomb
+    end
 
     @player.move
     @bullets.update
@@ -64,7 +67,7 @@ class GameEngine
   end
  
   def pulse(value)
-    if @increment
+    if @increment != nil && @increment
        val = [125, value+1].min
        @increment = val != 125
     else
@@ -103,14 +106,17 @@ class GameEngine
     @font.draw("#{@player.score}", 500, 60, ZOrder::UI)
     @font.draw("Level: #{@player.level}", 500, 80, ZOrder::UI)
     @font.draw("Lives: #{@player.lives}", 500, 100, ZOrder::UI)
+ 
     @font.draw("Z:", 500, 140, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @circ.draw(540, 150, ZOrder::UI, 0.2, 0.2)
-      
     @font.draw("X:", 500, 160, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @squr.draw(540, 170, ZOrder::UI, 0.2, 0.2)
-
     @font.draw("C:", 500, 180, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @tria.draw(540, 190, ZOrder::UI, 0.2, 0.2)
+
+    @circ.draw(540, 150, ZOrder::UI, 1.0, 1.0)
+    @squr.draw(540, 170, ZOrder::UI, 1.0, 1.0)
+    @tria.draw(540, 190, ZOrder::UI, 1.0, 1.0)
+
+    bomb_string = "*"*@player.bombs
+    @font.draw("Bombs: #{bomb_string}", 500, 220, ZOrder::UI)
 
     @font.draw "FPS: #{Gosu::fps} Waves: #{@waves.size}", 0, 0, 0
   end

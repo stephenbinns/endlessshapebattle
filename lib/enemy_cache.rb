@@ -27,6 +27,10 @@ class EnemyCache
     @enemies.each { |b| b.draw }
   end
 
+  def bomb
+    @enemies.select { |b| b.active? }.each { |e| e.collided }
+  end
+
   def update
     @cooloff -= 1
     if @cooloff <= 0
