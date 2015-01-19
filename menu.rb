@@ -3,8 +3,9 @@ require 'gosu'
 class MainMenu
   def initialize(window)
     @window = window
-    @font = Gosu::Font.new window, Gosu::default_font_name, 20
     @wallpaper = Gosu::Image.new(window, "media/fullscreen.png", false)
+    @font = Gosu::Font.new window, "media/digiffiti.ttf", 48
+    @font_l = Gosu::Font.new window, "media/digiffiti.ttf", 128
     @menu = []
     @menu << MenuItem.new("Start", @font, 1, lambda { start_game }, true) 
     @menu << MenuItem.new("Scores", @font, 2, lambda { high_scores }, false) 
@@ -15,6 +16,7 @@ class MainMenu
   def draw
     @wallpaper.draw 0,0,0
     @menu.each { |m| m.draw } 
+    @font_l.draw("E.S.B", 180, 80, ZOrder::UI)
   end
 
   def high_scores
@@ -79,9 +81,9 @@ class MenuItem
   def draw
     color = 0xffffffff
     if @selected
-      color = 0xffaaffff
+      color = 0xff22ffff
     end
-    @font.draw(@text, 280, 30 * @index + 200, ZOrder::UI, 1.0, 1.0, color)
+    @font.draw(@text, 280, 35 * @index + 200, ZOrder::UI, 1.0, 1.0, color)
   end
     
   def select

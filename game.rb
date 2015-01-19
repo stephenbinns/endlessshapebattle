@@ -3,7 +3,7 @@ class GameEngine
 
   def initialize(window)
     @window = window
-    @font = Gosu::Font.new window, Gosu::default_font_name, 20
+    @font = Gosu::Font.new window, "media/digiffiti.ttf", 32
     @player = Player.new(window)
     @player.warp(80 * 3 + 3, 400)
     @bullets = BulletCache.new(window, player)
@@ -15,6 +15,10 @@ class GameEngine
     @bloom.glare_size = 0.005
     @bloom.power = 0.25 
     @waves = []
+
+    @circ = Gosu::Image.new(window, "media/Circle.png", true)
+    @squr = Gosu::Image.new(window, "media/Square.png", true)
+    @tria = Gosu::Image.new(window, "media/Triangle.png", true)
   end
 
   def button_down(id)
@@ -28,7 +32,6 @@ class GameEngine
   end
 
   def update
-    $gosu_blocks.clear if defined? $gosu_blocks # workaround for Gosu 0.7.45 bug.
     if button_down? Gosu::KbLeft or button_down? Gosu::GpLeft then
       @player.move_left
     end
@@ -96,13 +99,18 @@ class GameEngine
     end
 
     @wallpaper.draw(480,0, ZOrder::UI)
-    @font.draw("Score: #{@player.score}", 500, 40, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw("Chain: #{@player.chain}", 500, 60, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw("Level: #{@player.level}", 500, 80, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw("Lives: #{@player.lives}", 500, 100, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw("Z: () ", 500, 140, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw("X: []", 500, 160, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw("C: /\\", 500, 180, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+    @font.draw("Score:", 500, 40, ZOrder::UI)
+    @font.draw("#{@player.score}", 500, 60, ZOrder::UI)
+    @font.draw("Level: #{@player.level}", 500, 80, ZOrder::UI)
+    @font.draw("Lives: #{@player.lives}", 500, 100, ZOrder::UI)
+    @font.draw("Z:", 500, 140, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+    @circ.draw(540, 150, ZOrder::UI, 0.2, 0.2)
+      
+    @font.draw("X:", 500, 160, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+    @squr.draw(540, 170, ZOrder::UI, 0.2, 0.2)
+
+    @font.draw("C:", 500, 180, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+    @tria.draw(540, 190, ZOrder::UI, 0.2, 0.2)
 
     @font.draw "FPS: #{Gosu::fps} Waves: #{@waves.size}", 0, 0, 0
   end

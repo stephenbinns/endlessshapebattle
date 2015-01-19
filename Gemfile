@@ -1,4 +1,7 @@
 source 'https://rubygems.org'
 gem 'gosu' 
 gem 'ashton'
-gem 'releasy'
+
+group :development do
+  gem "releasy"
+end

@@ -7,11 +7,10 @@ require 'releasy'
     version "0.0.1"
     verbose # Can be removed if you don't want to see all build messages.
 
-    executable "main.rb"
+    executable "esb.rb"
     files `git ls-files`.split("\n")
     files.exclude '.gitignore'
     add_link "http://stephenbinns.github.com", "My Application website"
-    exclude_encoding # Applications that don't use advanced encoding (e.g. Japanese characters) can save build size with this.
 
     # Create a variety of releases, for all platforms.
     add_build :osx_app do

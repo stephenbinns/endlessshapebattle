@@ -4,7 +4,7 @@ require 'yaml'
 class HighScores
   def initialize(window, score)
     @window = window
-    @font = Gosu::Font.new window, Gosu::default_font_name, 20
+    @font = Gosu::Font.new window, "media/digiffiti.ttf", 32
     @wallpaper = Gosu::Image.new(window, "media/fullscreen.png", false)
     @scores = load_scores
     if score > top_scores.last.value
@@ -32,12 +32,14 @@ class HighScores
 
   def draw
     @wallpaper.draw 0,0,0
-    @font.draw("High scores", 260, 30, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+    @font.draw("High scores", 240, 30, ZOrder::UI, 1.0, 1.0, 0xffffffff)
     index = 0
     top_scores.each do |m| 
        index += 1
        m.draw(@font, index)
     end 
+
+    @font.draw("Press X to go back", 180, 400, ZOrder::UI)
   end
 
   def main_menu
