@@ -21,6 +21,7 @@ class Player
     @level = 1
     @lives = 3
     @x, @y = (80 * 3 + 3), 400
+    @bomb_target = 200
   end
 
   def warp(x, y)
@@ -49,14 +50,19 @@ class Player
 
   def hit_shape
     @chain += 1
+    @chain = [@chain, 9].min
     @score += @chain
     @level = (@score / 100) + 1
-    @bombs += 1 if @score > 100 * [@level - 1, 1].max # todo fix this so it works!!
+    if @score > @bomb_target
+      @bombs += 1 
+      @bomb_target *= 2
+    end
     @cooloff = 0
   end
  
   def hit_nothing
     @chain = [@chain-1, 0].max
+    @game.combo Combo.new @x, @y, "-1" 
   end
   
   def take_hit

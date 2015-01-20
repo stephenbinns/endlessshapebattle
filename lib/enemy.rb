@@ -31,7 +31,7 @@ class Enemy
     @active = false
     @speed = 0
     @player.hit_shape
-    origin_x = @x
+    origin_x = @x + 10 
     origin_y = @y
     @game.make_waves Shockwave.new(origin_x, origin_y)
     @game.combo Combo.new(origin_x, origin_y, @player.chain)
