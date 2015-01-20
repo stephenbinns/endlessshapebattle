@@ -4,10 +4,10 @@ class Player
   def initialize(window, game)
     @window = window
     @game = game
-    @image_c = Gosu::Image.new(window, "media/Circle.png", false)
-    @image_s = Gosu::Image.new(window, "media/Square.png", false)
-    @image_t = Gosu::Image.new(window, "media/Triangle.png", false)
-    
+    @image_c = Gosu::Image.new(window, 'media/Circle.png', false)
+    @image_s = Gosu::Image.new(window, 'media/Square.png', false)
+    @image_t = Gosu::Image.new(window, 'media/Triangle.png', false)
+
     reset
   end
 
@@ -27,7 +27,7 @@ class Player
   def warp(x, y)
     @x, @y = x, y
   end
-  
+
   def move_left
     do_move(-80)
   end
@@ -35,7 +35,7 @@ class Player
   def move_right
     do_move(80)
   end
-  
+
   def change_type(type)
     @type = type
     case type
@@ -54,17 +54,17 @@ class Player
     @score += @chain
     @level = (@score / 100) + 1
     if @score > @bomb_target
-      @bombs += 1 
+      @bombs += 1
       @bomb_target *= 2
     end
     @cooloff = 0
   end
- 
+
   def hit_nothing
-    @chain = [@chain-1, 0].max
-    @game.combo Combo.new @x, @y, "-1" 
+    @chain = [@chain - 1, 0].max
+    @game.combo Combo.new @x, @y, '-1'
   end
-  
+
   def take_hit
     @lives -= 1
     if @lives == 0
@@ -73,8 +73,8 @@ class Player
   end
 
   def fire
-     @cooloff = 10
-     # todo play sound
+    @cooloff = 10
+    # todo play sound
   end
 
   def bomb
@@ -95,7 +95,7 @@ class Player
   end
 
   def can_fire?
-    @cooloff <= 0;
+    @cooloff <= 0
   end
 
   def draw

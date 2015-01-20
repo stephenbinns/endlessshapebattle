@@ -1,5 +1,5 @@
 class Enemy
-  attr_reader :x, :y, :type 
+  attr_reader :x, :y, :type
 
   def initialize(window, image, type, player, game)
     @window = window
@@ -22,25 +22,25 @@ class Enemy
     @speed = [@player.level + rand(2), 5].min
     @active = true
   end
- 
+
   def active?
     @active
   end
- 
+
   def collided
     @active = false
     @speed = 0
     @player.hit_shape
-    origin_x = @x + 10 
+    origin_x = @x + 10
     origin_y = @y
     @game.make_waves Shockwave.new(origin_x, origin_y)
     @game.combo Combo.new(origin_x, origin_y, @player.chain)
   end
 
-  def draw  
+  def draw
     return unless @active
 
-    @img.draw(@x, @y, ZOrder::Stars,1,1, @color, :add)
+    @img.draw(@x, @y, ZOrder::Stars, 1, 1, @color, :add)
   end
 
   def update

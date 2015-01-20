@@ -15,15 +15,15 @@ class BulletCache
   end
 
   def check_collisions(others)
-    active = @bullets.select { |b| b.active? }
+    active = @bullets.select(&:active?)
     active.each { |b| b.collide(others.select { |o| o.type == b.type }) }
   end
 
   def draw
-    @bullets.each { |b| b.draw }
+    @bullets.each(&:draw)
   end
 
   def update
-    @bullets.each { |b| b.update }
+    @bullets.each(&:update)
   end
 end

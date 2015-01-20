@@ -4,6 +4,8 @@
 - !ruby/object:ScoreItem
   value: 1142
 - !ruby/object:ScoreItem
+  value: 935
+- !ruby/object:ScoreItem
   value: 816
 - !ruby/object:ScoreItem
   value: 718
@@ -17,5 +19,3 @@
   value: 668
 - !ruby/object:ScoreItem
   value: 645
-- !ruby/object:ScoreItem
-  value: 612

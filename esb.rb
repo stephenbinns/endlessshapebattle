@@ -37,7 +37,7 @@ class GameWindow < Gosu::Window
   def update
     @state.update
   end
- 
+
   def draw
     @state.draw
   end

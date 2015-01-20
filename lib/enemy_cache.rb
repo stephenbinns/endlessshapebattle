@@ -9,11 +9,11 @@ class EnemyCache
       type = @enemies.size % 3
       case type
         when Shapes::Circle
-          @enemies << Enemy.new(window, "Circle", type, player, game_view)
+          @enemies << Enemy.new(window, 'Circle', type, player, game_view)
         when Shapes::Square
-          @enemies << Enemy.new(window, "Square", type, player, game_view)
+          @enemies << Enemy.new(window, 'Square', type, player, game_view)
         when Shapes::Triangle
-          @enemies << Enemy.new(window, "Triangle", type, player, game_view)
+          @enemies << Enemy.new(window, 'Triangle', type, player, game_view)
       end
     end
   end
@@ -24,11 +24,11 @@ class EnemyCache
   end
 
   def draw
-    @enemies.each { |b| b.draw }
+    @enemies.each(&:draw)
   end
 
   def bomb
-    @enemies.select { |b| b.active? }.each { |e| e.collided }
+    @enemies.select(&:active?).each(&:collided)
   end
 
   def update
@@ -37,8 +37,8 @@ class EnemyCache
       spawn
       @cooloff = [150 - (@player.level * rand(30)), 30].max
     end
-    @enemies.each { |b| b.update }
+    @enemies.each(&:update)
 
-    @bullets.check_collisions @enemies.select { |e| e.active? }
+    @bullets.check_collisions @enemies.select(&:active?)
   end
 end
