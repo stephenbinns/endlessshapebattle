@@ -5,6 +5,7 @@ class EnemyCache
     @bullets = bullets
     @cooloff = 0
     @enemies = []
+    @game = game_view
     while @enemies.size < 30
       type = @enemies.size % 3
       case type
@@ -16,6 +17,7 @@ class EnemyCache
           @enemies << Enemy.new(window, 'Triangle', type, player, game_view)
       end
     end
+    @circle_spawned = @square_spawned = @triangle_spawned = false
   end
 
   def spawn
@@ -40,5 +42,27 @@ class EnemyCache
     @enemies.each(&:update)
 
     @bullets.check_collisions @enemies.select(&:active?)
+    tutorial
+  end
+
+  private
+  def tutorial
+    return if @circle_spawned && @square_spawned && @triangle_spawned
+
+    @enemies.select(&:active?).each do |enemy|
+      return if enemy.y < 30
+
+      case enemy.type
+      when Shapes::Circle
+        @game.notify "Shoot Circles with Z", true unless @circle_spawned
+        @circle_spawned = true
+      when Shapes::Square
+        @game.notify "Shoot Squares with X", true unless @square_spawned
+        @square_spawned = true
+      when Shapes::Triangle
+        @game.notify "Shoot Triangles with C", true unless @triangle_spawned
+        @triangle_spawned = true
+      end
+    end
   end
 end

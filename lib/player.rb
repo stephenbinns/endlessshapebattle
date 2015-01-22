@@ -8,6 +8,13 @@ class Player
     @image_s = Gosu::Image.new(window, 'media/Square.png', false)
     @image_t = Gosu::Image.new(window, 'media/Triangle.png', false)
 
+    @shoot = Gosu::Sample.new(window, "media/Shoot.wav")
+    @death = Gosu::Sample.new(window, "media/Death.wav")
+    @hit = Gosu::Sample.new(window, "media/Hit.wav")
+    @miss = Gosu::Sample.new(window, "media/Miss.wav")
+    @level_up = Gosu::Sample.new(window, "media/LevelUp.wav")
+    @bomb_sound = Gosu::Sample.new(window, "media/Explosion.wav")
+
     reset
   end
 
@@ -52,29 +59,47 @@ class Player
     @chain += 1
     @chain = [@chain, 9].min
     @score += @chain
+
+    old_level = @level
     @level = (@score / 100) + 1
+
+    if old_level != @level
+      @game.notify 'Level up!', false
+      @level_up.play
+      old_level = @level
+    end
+
     if @score > @bomb_target
       @bombs += 1
+      if @bomb_target == 200
+        @game.notify 'Bomb with space', false
+      end
+      @level_up.play
       @bomb_target *= 2
     end
     @cooloff = 0
+    @hit.play
   end
 
   def hit_nothing
-    @chain = [@chain - 1, 0].max
-    @game.combo Combo.new @x, @y, '-1'
+    @chain = 0
+    @game.combo Combo.new @x, @y, '0'
+    @miss.play
   end
 
   def take_hit
     @lives -= 1
     if @lives == 0
       @window.change_state HighScores.new @window, @score
+      @death.play
+    else
+      @miss.play
     end
   end
 
   def fire
     @cooloff = 10
-    # todo play sound
+    @shoot.play
   end
 
   def bomb
@@ -83,6 +108,7 @@ class Player
     @bombs -= 1
     @bomb_cooloff = 10
     @game.enemy_cache.bomb
+    @bomb_sound.play
   end
 
   def move

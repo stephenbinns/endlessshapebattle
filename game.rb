@@ -21,6 +21,32 @@ class GameEngine
     @circ = Gosu::Image.new(window, 'media/CircleSmall.png', true)
     @squr = Gosu::Image.new(window, 'media/SquareSmall.png', true)
     @tria = Gosu::Image.new(window, 'media/TriangleSmall.png', true)
+    notify "Get ready", true
+    @song = Gosu::Song.new window, 'media/JumpShot.ogg'
+  end
+
+  def combo(combo)
+    @combos << combo
+  end
+
+  def pulse(value)
+    if !@increment.nil? && @increment
+      val = [125, value + 1].min
+      @increment = val != 125
+    else
+      val = [20, value - 1].max
+      @increment = val == 20
+    end
+
+    val
+  end
+
+  def make_waves(wave)
+    @waves << wave
+  end
+
+  def notify(text, should_pause)
+    @notify = Alert.new 220, 200, text, should_pause
   end
 
   def button_down(id)
@@ -34,6 +60,24 @@ class GameEngine
   end
 
   def update
+    if @song.playing? == false
+      @song.play(true)
+    end
+
+    if @notify && @notify.should_pause
+      if button_down?(Gosu::KbSpace)
+        @notify.unpause
+      end
+      @notify.update
+      @notify = nil if @notify.dead?
+      return
+    end
+
+    if @notify
+      @notify.update
+      @notify = nil if @notify.dead?
+    end
+      
     if button_down?(Gosu::KbLeft) || button_down?(Gosu::GpLeft)
       @player.move_left
     end
@@ -69,26 +113,6 @@ class GameEngine
 
     @combos.delete_if(&:dead?)
     @combos.each(&:update)
-  end
-
-  def combo(combo)
-    @combos << combo
-  end
-
-  def pulse(value)
-    if !@increment.nil? && @increment
-      val = [125, value + 1].min
-      @increment = val != 125
-    else
-      val = [20, value - 1].max
-      @increment = val == 20
-    end
-
-    val
-  end
-
-  def make_waves(wave)
-    @waves << wave
   end
 
   def draw
@@ -130,5 +154,8 @@ class GameEngine
     @font.draw("#{bomb_string}", 500, 240, ZOrder::UI)
 
     @font.draw "FPS: #{Gosu.fps} Waves: #{@waves.size}", 0, 0, 0
+    if @notify
+      @notify.draw(@font_large)
+    end
   end
 end

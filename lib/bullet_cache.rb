@@ -16,7 +16,7 @@ class BulletCache
 
   def check_collisions(others)
     active = @bullets.select(&:active?)
-    active.each { |b| b.collide(others.select { |o| o.type == b.type }) }
+    active.each { |b| b.collide(others) }
   end
 
   def draw

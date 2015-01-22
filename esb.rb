@@ -1,8 +1,3 @@
-# Required only so we know the gem is being copied properly.
-require 'rubygems'
-require 'bundler/setup' unless defined? OSX_EXECUTABLE_FOLDER # Can't require bundler because the current OSX wrapper is broken.
-require 'cri'
-
 require 'gosu'
 require 'ashton'
 
@@ -14,6 +9,7 @@ require_relative 'lib/bullet'
 require_relative 'lib/bullet_cache'
 require_relative 'lib/shockwave'
 require_relative 'lib/combo'
+require_relative 'lib/alert'
 require_relative 'lib/enemy'
 require_relative 'lib/enemy_cache'
 

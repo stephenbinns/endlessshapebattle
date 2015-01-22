@@ -39,7 +39,12 @@ class Bullet
   def collide(others)
     others.each do |o|
       if Gosu.distance(@x, @y, o.x + 40, o.y + 40) <= 40
-        o.collided
+        if o.type == @type
+          o.collided
+        else
+          @player.hit_nothing
+        end
+
         collided
       end
     end
