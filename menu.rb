@@ -11,7 +11,7 @@ class MainMenu
     @menu << MenuItem.new("Scores", lambda { high_scores }, false) 
     @menu << MenuItem.new("Options", lambda { options }, false) 
     @menu << MenuItem.new("Exit", lambda { window.close }, false) 
-    @cooloff = 0
+    @cooloff = 10
   end
 
   def draw
@@ -19,7 +19,12 @@ class MainMenu
     @menu.each_with_index { |m, i| m.draw(@font, i) } 
     @font_l.draw("E.S.B", 180, 80, ZOrder::UI)
 
-    @font.draw("Press Z to select", 180, 400, ZOrder::UI)
+    centered_text "Press Z to select", 400
+  end
+
+  def centered_text(text, y)
+    offset_x = text.length * 10
+    @font.draw(text, 320 - offset_x, y, ZOrder::UI)
   end
 
   def high_scores
@@ -68,7 +73,7 @@ class MainMenu
       move_up
     end
     if @window.button_down? Gosu::KbZ or @window.button_down? Gosu::GpButton1 then
-      selected_menu.select
+      selected_menu.select if @cooloff < 0
     end
     @cooloff -= 1
   end
@@ -89,7 +94,8 @@ class MenuItem
       color = 0xff22ffff
     end
     @index = i + 1
-    font.draw(@text, 280, 35 * i + 200, ZOrder::UI, 1.0, 1.0, color)
+    offset_x = @text.length * 10
+    font.draw(@text, 320 - offset_x, 35 * i + 200, ZOrder::UI, 1.0, 1.0, color)
   end
     
   def select

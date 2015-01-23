@@ -13,7 +13,7 @@ class Options
     @menu << MenuItem.new("Sounds - #{on_text @options[:sounds]}", lambda { toggle_sounds }, false) 
     @menu << MenuItem.new("Music - #{on_text @options[:music]}", lambda { toggle_music }, false) 
     @menu << MenuItem.new("Back", lambda { menu }, false) 
-    @cooloff = 0
+    @cooloff = 10
   end
 
   def load_options
@@ -39,7 +39,13 @@ class Options
   def draw
     @wallpaper.draw 0,0,0
     @menu.each_with_index { |m, i| m.draw(@font, i) } 
-    @font.draw("Options", 180, 80, ZOrder::UI)
+    centered_text "Options", 80
+    centered_text "Press Z to select", 400
+  end
+
+  def centered_text(text, y)
+    offset_x = text.length * 10
+    @font.draw(text, 320 - offset_x, y, ZOrder::UI)
   end
 
   def toggle_tutorial
@@ -100,6 +106,7 @@ class Options
     end
     if @window.button_down? Gosu::KbZ or @window.button_down? Gosu::GpButton1 then
       selected_menu.select
+      @cooloff = 10
     end
     @cooloff -= 1
   end
