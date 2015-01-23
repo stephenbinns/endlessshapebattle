@@ -42,7 +42,7 @@ class EnemyCache
     @enemies.each(&:update)
 
     @bullets.check_collisions @enemies.select(&:active?)
-    tutorial
+    tutorial if @game.options[:tutorial]
   end
 
   private

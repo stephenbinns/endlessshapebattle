@@ -7,16 +7,19 @@ class MainMenu
     @font = Gosu::Font.new window, "media/digiffiti.ttf", 48
     @font_l = Gosu::Font.new window, "media/digiffiti.ttf", 128
     @menu = []
-    @menu << MenuItem.new("Start", @font, 1, lambda { start_game }, true) 
-    @menu << MenuItem.new("Scores", @font, 2, lambda { high_scores }, false) 
-    @menu << MenuItem.new("Exit", @font, 3, lambda { window.close }, false) 
+    @menu << MenuItem.new("Start", lambda { start_game }, true) 
+    @menu << MenuItem.new("Scores", lambda { high_scores }, false) 
+    @menu << MenuItem.new("Options", lambda { options }, false) 
+    @menu << MenuItem.new("Exit", lambda { window.close }, false) 
     @cooloff = 0
   end
 
   def draw
     @wallpaper.draw 0,0,0
-    @menu.each { |m| m.draw } 
+    @menu.each_with_index { |m, i| m.draw(@font, i) } 
     @font_l.draw("E.S.B", 180, 80, ZOrder::UI)
+
+    @font.draw("Press Z to select", 180, 400, ZOrder::UI)
   end
 
   def high_scores
@@ -27,12 +30,16 @@ class MainMenu
     @window.change_state GameEngine.new @window
   end
 
+  def options
+    @window.change_state Options.new @window
+  end
+
   def move_down
     return if @cooloff > 0
     current = selected_menu
     current.selected = false
     index = current.index
-    index = [current.index + 1, 3].min
+    index = [current.index + 1, @menu.length].min
 
     @menu[index - 1].selected = true
     @cooloff = 10
@@ -68,22 +75,21 @@ class MainMenu
 end
 
 class MenuItem
-  attr_accessor :selected, :index
+  attr_accessor :selected, :index, :text
 
-  def initialize(text, font, index, callback, selected)
+  def initialize(text, callback, selected)
     @text = text
-    @font = font
-    @index = index
     @callback = callback
     @selected = selected
   end
 
-  def draw
+  def draw(font, i)
     color = 0xffffffff
     if @selected
       color = 0xff22ffff
     end
-    @font.draw(@text, 280, 35 * @index + 200, ZOrder::UI, 1.0, 1.0, color)
+    @index = i + 1
+    font.draw(@text, 280, 35 * i + 200, ZOrder::UI, 1.0, 1.0, color)
   end
     
   def select

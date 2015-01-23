@@ -1,5 +1,5 @@
 class GameEngine
-  attr_reader :bullets, :player, :enemy_cache
+  attr_reader :bullets, :player, :enemy_cache, :options
 
   def initialize(window)
     @window = window
@@ -23,6 +23,20 @@ class GameEngine
     @tria = Gosu::Image.new(window, 'media/TriangleSmall.png', true)
     notify "Get ready", true
     @song = Gosu::Song.new window, 'media/JumpShot.ogg'
+
+    load_options
+  end
+
+  def load_options
+    begin
+      @options = YAML::load_file('options.yml')
+    rescue
+      @options = {
+        :tutorial => true,
+        :sounds => true,
+        :music => true
+      }
+    end
   end
 
   def combo(combo)
@@ -60,7 +74,7 @@ class GameEngine
   end
 
   def update
-    if @song.playing? == false
+    if @options[:music] && @song.playing? == false
       @song.play(true)
     end
 

@@ -65,7 +65,7 @@ class Player
 
     if old_level != @level
       @game.notify 'Level up!', false
-      @level_up.play
+      @level_up.play if @game.options[:sounds]
       old_level = @level
     end
 
@@ -74,26 +74,26 @@ class Player
       if @bomb_target == 200
         @game.notify 'Bomb with space', false
       end
-      @level_up.play
+      @level_up.play if @game.options[:sounds]
       @bomb_target *= 2
     end
     @cooloff = 0
-    @hit.play
+    @hit.play if @game.options[:sounds]
   end
 
   def hit_nothing
     @chain = 0
     @game.combo Combo.new @x, @y, '0'
-    @miss.play
+    @miss.play if @game.options[:sounds]
   end
 
   def take_hit
     @lives -= 1
     if @lives == 0
       @window.change_state HighScores.new @window, @score
-      @death.play
+      @death.play if @game.options[:sounds]
     else
-      @miss.play
+      @miss.play if @game.options[:sounds]
     end
   end
 
@@ -108,7 +108,7 @@ class Player
     @bombs -= 1
     @bomb_cooloff = 10
     @game.enemy_cache.bomb
-    @bomb_sound.play
+    @bomb_sound.play if @game.options[:sounds]
   end
 
   def move
