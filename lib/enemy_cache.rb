@@ -18,10 +18,16 @@ class EnemyCache
       end
     end
     @circle_spawned = @square_spawned = @triangle_spawned = false
+    @exclude_type = []
+    @exclude_type << Shapes::Triangle
   end
 
   def spawn
-    enemy = @enemies.select { |b| b.active? == false }.shuffle.first
+    if @player.level > 3
+      @exclude_type = []
+    end
+
+    enemy = @enemies.select { |b| b.active? == false && @exclude_type.member?(b.type) == false }.shuffle.first
     enemy.spawn if enemy
   end
 

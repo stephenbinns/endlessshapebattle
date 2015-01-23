@@ -14,7 +14,7 @@ class HighScores
       File.open('scores.yml', 'w') {|f| f.write top_scores.to_yaml }
     end 
 
-    @cooloff = 0
+    @cooloff = 10
   end
 
   def load_scores
@@ -39,7 +39,7 @@ class HighScores
        m.draw(@font, index)
     end 
 
-    centered_text "Press X to go back", 400
+    centered_text "Press Z to go back", 400
   end
 
   def main_menu
@@ -47,9 +47,10 @@ class HighScores
   end
 
   def update
-    if @window.button_down? Gosu::KbX or @window.button_down? Gosu::GpButton1 then
-      main_menu
+    if @window.button_down? Gosu::KbZ or @window.button_down? Gosu::GpButton1 then
+      main_menu if @cooloff < 0
     end
+    @cooloff -= 1
   end
 
   def centered_text(text, y)
