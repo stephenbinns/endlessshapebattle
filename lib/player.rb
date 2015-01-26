@@ -66,6 +66,7 @@ class Player
     if old_level != @level
       @game.notify 'Level up!', false
       @level_up.play if @game.options[:sounds]
+      @game.level_up
       old_level = @level
     end
 

@@ -55,11 +55,19 @@ class GameEngine
     val
   end
 
+  def level_up
+    puts "#{player.level}"
+    if @player.level % 3 == 0
+      @enemy_cache.bonus
+      notify "Bonus level"
+    end
+  end
+
   def make_waves(wave)
     @waves << wave
   end
 
-  def notify(text, should_pause)
+  def notify(text, should_pause = false)
     @notify = Alert.new 220, 200, text, should_pause
   end
 
@@ -155,9 +163,9 @@ class GameEngine
     @font.draw("Level: #{@player.level}", 500, 80, ZOrder::UI)
     @font.draw("Lives: #{@player.lives}", 500, 100, ZOrder::UI)
 
-    @font.draw('Z:', 500, 140, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw('X:', 500, 160, ZOrder::UI, 1.0, 1.0, 0xffffffff)
-    @font.draw('C:', 500, 180, ZOrder::UI, 1.0, 1.0, 0xffffffff)
+    @font.draw('Z:', 500, 140, ZOrder::UI)
+    @font.draw('X:', 500, 160, ZOrder::UI)
+    @font.draw('C:', 500, 180, ZOrder::UI)
 
     @circ.draw(540, 150, ZOrder::UI, 1.0, 1.0)
     @squr.draw(540, 170, ZOrder::UI, 1.0, 1.0)
@@ -167,7 +175,9 @@ class GameEngine
     @font.draw('Bombs:', 500, 220, ZOrder::UI)
     @font.draw("#{bomb_string}", 500, 240, ZOrder::UI)
 
-    @font.draw "FPS: #{Gosu.fps} Waves: #{@waves.size}", 0, 0, 0
+    if @options[:show_fps]
+      @font.draw "FPS: #{Gosu.fps} Waves: #{@waves.size}", 0, 0, 0
+    end
     if @notify
       @notify.draw(@font_large)
     end

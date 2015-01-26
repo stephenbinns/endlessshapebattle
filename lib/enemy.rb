@@ -14,12 +14,16 @@ class Enemy
   end
 
   def spawn
-    @x = rand(6) * 80 + 3
+    spawn_at rand(6), rand(2)
+  end
+
+  def spawn_at(index, speed_modifier = 0)
+    @x = index * 80 + 3
     @y = -90
     @color.red = rand(256 - 40) + 40
     @color.green = rand(256 - 40) + 40
     @color.blue = rand(256 - 40) + 40
-    @speed = [@player.level + rand(2), 5].min
+    @speed = [@player.level + speed_modifier, 5].min
     @active = true
   end
 

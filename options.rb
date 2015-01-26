@@ -23,7 +23,8 @@ class Options
       @options = {
         :tutorial => true,
         :sounds => true,
-        :music => true
+        :music => true,
+        :show_fps => false
       }
     end
   end
