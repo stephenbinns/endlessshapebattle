@@ -5,21 +5,36 @@ class MainMenu
     @window = window
     @wallpaper = Gosu::Image.new(window, "media/fullscreen.png", false)
     @font = Gosu::Font.new window, "media/digiffiti.ttf", 48
-    @font_l = Gosu::Font.new window, "media/digiffiti.ttf", 128
+    @font_l = Gosu::Font.new window, "media/digiffiti.ttf", 150
+    @hyper_font = Gosu::Font.new(window, "media/digiffiti.ttf", 60)
     @menu = []
     @menu << MenuItem.new("Start", lambda { start_game }, true) 
     @menu << MenuItem.new("Scores", lambda { high_scores }, false) 
     @menu << MenuItem.new("Options", lambda { options }, false) 
     @menu << MenuItem.new("Exit", lambda { window.close }, false) 
     @cooloff = 10
+    @color = Gosu::Color.new(0xff000000)
   end
 
   def draw
     @wallpaper.draw 0,0,0
     @menu.each_with_index { |m, i| m.draw(@font, i) } 
-    @font_l.draw("E.S.B", 180, 80, ZOrder::UI)
+    @font_l.draw("E-S-B", 120, 50, ZOrder::UI, 1.0, 1.0, @color)
+    @hyper_font.draw("hyper", 120, 40, ZOrder::UI, 1.0, 1.0, @color)
 
     centered_text "Press Z to select", 400
+  end
+
+  def pulse(value)
+    if !@increment.nil? && @increment
+      val = [200, value + rand(3)].min
+      @increment = val != 200
+    else
+      val = [125, value - rand(4)].max
+      @increment = val <= 125
+    end
+
+    val
   end
 
   def centered_text(text, y)
@@ -76,6 +91,10 @@ class MainMenu
       selected_menu.select if @cooloff < 0
     end
     @cooloff -= 1
+
+    @color.red = pulse(@color.red)
+    @color.green = pulse(@color.green)
+    @color.blue = pulse(@color.blue)
   end
 end
 

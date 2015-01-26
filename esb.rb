@@ -5,6 +5,7 @@ require_relative 'menu'
 require_relative 'scores'
 require_relative 'game'
 require_relative 'options'
+require_relative 'intro'
 require_relative 'lib/player'
 require_relative 'lib/bullet'
 require_relative 'lib/bullet_cache'
@@ -17,8 +18,8 @@ require_relative 'lib/enemy_cache'
 class GameWindow < Gosu::Window
   def initialize
     super(640, 480, false)
-    self.caption = 'Endless Shape Battle - 0.1'
-    @state = MainMenu.new self
+    self.caption = 'HYPER Endless Shape Battle - 1.0'
+    @state = Intro.new self
   end
 
   def button_down(id)

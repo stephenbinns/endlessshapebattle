@@ -13,7 +13,7 @@ class Alert
     @should_pause = false
   end
 
-  def initialize(x, y, text, should_pause)
+  def initialize(x, y, text, should_pause, death_time = 1.5, alpha_fade = 4)
     @x = x
     @y = y
     @text = text
@@ -21,14 +21,15 @@ class Alert
     @color = Gosu::Color.new(0xffffffff)
     @start_time = Gosu.milliseconds
     if @should_pause
-      @death_time = 1.5
+      @death_time = death_time 
     else
-      @death_time = 3.0
+      @death_time = death_time * 2
     end
+    @alpha_fade = alpha_fade
   end
 
   def update
-    @color.alpha -= 4
+    @color.alpha -= @alpha_fade
   end
 
   def draw(font)
