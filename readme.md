@@ -11,11 +11,11 @@ Controls are:
 
 And arrow keys for movement
 
-Moving to the edge of the screen will result in a warp to the other side, this is aid player at higher level difficulty
+Moving to the edge of the screen will result in a warp to the other side, this aids the player at higher level difficulty
 
 # Building
 
-Currently this build on OSX only
+Currently this builds on OSX only
 
 ```
 bundle install
@@ -29,5 +29,6 @@ This willl output an .app file in the pkg/osx folder
 * Gosu authors - http://www.libgosu.org
 * @BilBas - for ashton gem, and help resolving build issues
 * Eric Skiff - http://www.ericskiff.com - for music
+* http://www.dafont.com/font.php?file=digiffiti - digiffiti font
 
 All other portions - Stephen Binns 2015
