@@ -1,5 +1,5 @@
 ---
-:tutorial: true
+:tutorial: false
 :sounds: true
-:music: true
+:music: false
 :show_fps: false
