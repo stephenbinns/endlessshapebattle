@@ -1,5 +1,8 @@
 require 'gosu'
-require 'ashton'
+if not Gem.win_platform?
+  require 'ashton'
+end
+ENV['PATH'] = File.join(File.expand_path(__FILE__),"lib") + ";" + ENV['PATH']
 
 require_relative 'menu'
 require_relative 'scores'

@@ -8,19 +8,26 @@ class MainMenu
     @font_l = Gosu::Font.new window, "media/digiffiti.ttf", 150
     @hyper_font = Gosu::Font.new(window, "media/digiffiti.ttf", 60)
     @menu = []
-    @menu << MenuItem.new("Start", lambda { start_game }, true) 
-    @menu << MenuItem.new("Scores", lambda { high_scores }, false) 
-    @menu << MenuItem.new("Options", lambda { options }, false) 
-    @menu << MenuItem.new("Exit", lambda { window.close }, false) 
+    @menu << MenuItem.new("Start", lambda { start_game }, true)
+    @menu << MenuItem.new("Scores", lambda { high_scores }, false)
+    @menu << MenuItem.new("Options", lambda { options }, false)
+    @menu << MenuItem.new("Exit", lambda { window.close }, false)
     @cooloff = 10
     @color = Gosu::Color.new(0xff000000)
   end
 
   def draw
     @wallpaper.draw 0,0,0
-    @menu.each_with_index { |m, i| m.draw(@font, i) } 
-    @font_l.draw("E-S-B", 120, 50, ZOrder::UI, 1.0, 1.0, @color)
-    @hyper_font.draw("hyper", 120, 40, ZOrder::UI, 1.0, 1.0, @color)
+    @menu.each_with_index { |m, i| m.draw(@font, i) }
+
+    if Gem.win_platform?
+      offset = 60
+    else
+      offset = 120
+    end
+
+    @font_l.draw("E-S-B", offset, 50, ZOrder::UI, 1.0, 1.0, @color)
+    @hyper_font.draw("hyper", offset, 40, ZOrder::UI, 1.0, 1.0, @color)
 
     centered_text "Press Z to select", 400
   end
@@ -45,7 +52,7 @@ class MainMenu
   def high_scores
     @window.change_state HighScores.new @window, 0
   end
-  
+
   def start_game
     @window.change_state GameEngine.new @window
   end
@@ -116,8 +123,8 @@ class MenuItem
     offset_x = @text.length * 10
     font.draw(@text, 320 - offset_x, 35 * i + 200, ZOrder::UI, 1.0, 1.0, color)
   end
-    
+
   def select
     @callback.call
-  end 
+  end
 end

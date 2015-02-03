@@ -21,7 +21,7 @@ class Alert
     @color = Gosu::Color.new(0xffffffff)
     @start_time = Gosu.milliseconds
     if @should_pause
-      @death_time = death_time 
+      @death_time = death_time
     else
       @death_time = death_time * 2
     end
@@ -33,7 +33,13 @@ class Alert
   end
 
   def draw(font)
-    offset_x = @text.length * 10
+    if Gem.win_platform?
+      offset = 14
+    else
+      offset = 10
+    end
+
+    offset_x = @text.length * offset
     font.draw(@text, @x - offset_x, @y, ZOrder::UI, 1.0, 1.0, @color)
   end
 end

@@ -3,6 +3,17 @@ class GameEngine
 
   def initialize(window)
     @window = window
+
+    if not Gem.win_platform?
+      @bloom = Ashton::Shader.new fragment: :bloom
+      @bloom.glare_size = 0.005
+      @bloom.power = 0.25
+      @notify_x_offset = 220
+    else
+      Gosu::enable_undocumented_retrofication
+      @notify_x_offset = 280
+    end
+
     @font = Gosu::Font.new window, 'media/digiffiti.ttf', 32
     @font_large = Gosu::Font.new window, 'media/digiffiti.ttf', 48
     @player = Player.new(window, self)
@@ -12,9 +23,8 @@ class GameEngine
     @grid = Gosu::Image.new(window, 'media/Grid.png', true)
     @wallpaper = Gosu::Image.new(window, 'media/wallpaper.png', false)
     @color = Gosu::Color.new(0xff000000)
-    @bloom = Ashton::Shader.new fragment: :bloom
-    @bloom.glare_size = 0.005
-    @bloom.power = 0.25
+
+
     @waves = []
     @combos = []
 
@@ -68,7 +78,7 @@ class GameEngine
   end
 
   def notify(text, should_pause = false)
-    @notify = Alert.new 220, 200, text, should_pause
+    @notify = Alert.new @notify_x_offset, 200, text, should_pause
   end
 
   def button_down(id)
@@ -99,7 +109,7 @@ class GameEngine
       @notify.update
       @notify = nil if @notify.dead?
     end
-      
+
     if button_down?(Gosu::KbLeft) || button_down?(Gosu::GpLeft)
       @player.move_left
     end
@@ -137,24 +147,32 @@ class GameEngine
     @combos.each(&:update)
   end
 
-  def draw
-    shaders = @waves.map(&:shader)
-    shaders << @bloom
-    @window.post_process(*shaders) do
-      @bullets.draw
-      @enemy_cache.draw
-      @player.draw
-      @combos.each { |c| c.draw(@font_large) }
-      timex = 0
-      timey = 0
+  def post_process
+    @bullets.draw
+    @enemy_cache.draw
+    @player.draw
+    @combos.each { |c| c.draw(@font_large) }
+    timex = 0
+    timey = 0
+    6.times do
       6.times do
-        6.times do
-          @grid.draw(timex, timey, ZOrder::Background, 1, 1, @color, :add)
-          timey += 80
-        end
-        timey = 0
-        timex += 80
+        @grid.draw(timex, timey, ZOrder::Background, 1, 1, @color, :add)
+        timey += 80
       end
+      timey = 0
+      timex += 80
+    end
+  end
+
+  def draw
+    if not Gem.win_platform?
+      shaders = @waves.map(&:shader)
+      shaders << @bloom
+      @window.post_process(*shaders) do
+        post_process
+      end
+    else
+      post_process
     end
 
     @wallpaper.draw(480, 0, ZOrder::UI)

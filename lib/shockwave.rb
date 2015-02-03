@@ -10,14 +10,18 @@ class Shockwave
   end
 
   def initialize(x, y)
-    @shader = Ashton::Shader.new fragment: :shockwave, uniforms: {
-      shock_params: [10.0, 0.8, 0.1], # Not entirely sure what these represent!
-      center: [x, y]
-    }
+    if not Gem.win_platform?
+      @shader = Ashton::Shader.new fragment: :shockwave, uniforms: {
+        shock_params: [10.0, 0.8, 0.1], # Not entirely sure what these represent!
+        center: [x, y]
+      }
+    end
     @start_time = Gosu.milliseconds
   end
 
   def update
-    @shader.time = age
+    if not Gem.win_platform?
+      @shader.time = age
+    end
   end
 end
